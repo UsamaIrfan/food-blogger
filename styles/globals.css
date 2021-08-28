@@ -23,6 +23,7 @@ header a {
 }
 header h1, header h2 {
   margin: 0;
+  font-size: 3rem;
 }
 header span {
   display: block;
@@ -33,7 +34,7 @@ header span:first-child {
   font-weight: 400;
 }
 header span:last-child {
-  font-size: 1.5em;
+  font-size: 2em;
   font-weight: 800;
 }
 header h2 {
@@ -48,7 +49,7 @@ footer {
   margin-top: auto
 }
 .page-content {
-  max-width: 1200px;
+  max-width: 1980px;
   margin: 20px auto 80px;
   padding: 0 20px;
   width: 100%;

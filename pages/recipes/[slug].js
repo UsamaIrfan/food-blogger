@@ -1,6 +1,9 @@
+import React from "react";
 import { createClient } from "contentful"
 import Image from "next/image";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import DetailsSkeleton from "../../components/Skeletons/Details";
+import { useRouter } from "next/router";
 
 const client = createClient({
     space: process.env.COONTENTFUL_SPACE_ID,
@@ -20,15 +23,21 @@ export const getStaticPaths = async () => {
 
     return {
         paths,
-        fallback: false,
+        fallback: true,
     }
 }
 
 export const getStaticProps = async ({ params }) => {
-    const res = await client.getEntries({
-        content_type: "recipe",
-        'fields.slug': params.slug, // Gets only one recipe because slug is a unique value.
-    })
+    let res;
+    try {
+        res = await client.getEntries({
+            content_type: "recipe",
+            'fields.slug': params.slug, // Gets only one recipe because slug is a unique value.
+        })
+    }
+    catch (err) {
+
+    }
 
     return {
         props: {
@@ -38,8 +47,15 @@ export const getStaticProps = async ({ params }) => {
     }
 }
 
-export default function RecipeDetails({ recipe }) {
+export default function RecipeDetails({ recipe }) {    
+    
+    const router = useRouter()
+    
+    if (!recipe) return <div><DetailsSkeleton /></div>
+
+    
     const { featuredImage, title, cookingTime, ingredients, method } = recipe.fields
+    
     return (
         <div>
             <div className="banner">
@@ -48,6 +64,7 @@ export default function RecipeDetails({ recipe }) {
                     width={featuredImage.fields.file.details.image.width}
                     height={featuredImage.fields.file.details.image.height}
                     alt={`The recipe image ${title}`}
+                    className="banner-image"
                 />
                 <h2>{title}</h2>
             </div>
@@ -66,16 +83,20 @@ export default function RecipeDetails({ recipe }) {
                 h2,h3 {
                 text-transform: uppercase;
                 }
+                .banner {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                }
                 .banner h2 {
-                margin: 0;
-                background: #eeeeee;
-                display: inline-block;
-                padding: 20px;
-                position: relative;
-                top: -60px;
-                left: -10px;
-                transform: rotateZ(-1deg);
-                box-shadow: 1px 3px 5px rgba(0,0,0,0.1);
+                    margin: 0;
+                    background: #eeeeee;
+                    display: inline-block;
+                    padding: 20px;
+                    position: relative;
+                    top: -60px;
+                    left: -10px;
+                    transform: rotateZ(-1deg);
+                    box-shadow: 1px 3px 5px rgba(0,0,0,0.1);
                 }
                 .info p {
                 margin: 0;
