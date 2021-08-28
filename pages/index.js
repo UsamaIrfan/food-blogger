@@ -14,12 +14,15 @@ export const getStaticProps = async () => {
   })
 
   return {
-    props: { recipes: res.items, }
+    props: {
+      recipes: res.items,
+      revalidate: 1,
+    }
   }
 
 }
 
-export default function Recipes({recipes}) {
+export default function Recipes({ recipes }) {
   console.log(recipes)
   return (
     <div className="recipe-list">
