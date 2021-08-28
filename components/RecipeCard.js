@@ -70,6 +70,22 @@ function RecipeCard({ recipe }) {
                     padding: 16px 24px;
                     text-decoration: none;
                 }
+                @media screen and (max-width: 960px) {
+                    .info {
+                      padding: 10px;
+                    }
+                    .actions {
+                        margin-top: 10px;
+                        display: flex;
+                        justify-content: flex-end;
+                    }
+                    .actions a {
+                        color: #fff;
+                        background: #f01b29;
+                        padding: 12px 18px;
+                        text-decoration: none;
+                    }
+                  }
             `}</style>
 
         </div>
