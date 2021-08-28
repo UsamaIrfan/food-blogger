@@ -28,15 +28,19 @@ export const getStaticPaths = async () => {
 }
 
 export const getStaticProps = async ({ params }) => {
-    let res;
-    try {
-        res = await client.getEntries({
-            content_type: "recipe",
-            'fields.slug': params.slug, // Gets only one recipe because slug is a unique value.
-        })
-    }
-    catch (err) {
+    const res = await client.getEntries({
+        content_type: "recipe",
+        'fields.slug': params.slug, // Gets only one recipe because slug is a unique value.
+    })
 
+    
+    if (!res.items.length) {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false,
+            }
+        }
     }
 
     return {
@@ -47,15 +51,16 @@ export const getStaticProps = async ({ params }) => {
     }
 }
 
-export default function RecipeDetails({ recipe }) {    
-    
+export default function RecipeDetails({ recipe }) {
+
     const router = useRouter()
-    
+
     if (!recipe) return <div><DetailsSkeleton /></div>
 
-    
+
     const { featuredImage, title, cookingTime, ingredients, method } = recipe.fields
-    
+
+
     return (
         <div>
             <div className="banner">
@@ -71,9 +76,9 @@ export default function RecipeDetails({ recipe }) {
             <div className="info">
                 <p>Takes about {cookingTime} sec/min to cook.</p>
                 <h3>Ingredients: </h3>
-                {/* {ingredients.map((ing, idx) => (
+                {ingredients.map((ing, idx) => (
                     <span key={idx}>{ing}</span>
-                ))} */}
+                ))}
             </div>
             <div className="method">
                 <div>{documentToReactComponents(method)}</div>
